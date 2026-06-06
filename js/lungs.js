@@ -164,17 +164,26 @@
       var g = create("g", { fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" });
       if (mirror) g.setAttribute("transform", "translate(400,0) scale(-1,1)");
       tree.segs.forEach(function (s) {
+        // Pre-baked glow: a wide, faint stroke underneath the crisp line.
+        // Static (no filter, no per-frame work) — looks glowing, runs fast.
+        var halo = create("line", {
+          x1: s.x1, y1: s.y1, x2: s.x2, y2: s.y2,
+          "stroke-width": (s.w * 3 + 2).toFixed(2), stroke: "#bdf3ea", "stroke-opacity": "0.2",
+        });
         var ln = create("line", {
           x1: s.x1, y1: s.y1, x2: s.x2, y2: s.y2,
           "stroke-width": s.w.toFixed(2), stroke: "#bdf3ea", "stroke-opacity": "0.9",
         });
-        g.append(ln);
-        state.segs.push({ node: ln, w: s.w, leaf: false });
+        g.append(halo, ln);
+        state.segs.push({ node: halo, w: s.w, leaf: false, glow: true });
+        state.segs.push({ node: ln, w: s.w, leaf: false, glow: false });
       });
       tree.leaves.forEach(function (lf) {
-        var d = create("circle", { cx: lf.x, cy: lf.y, r: 1.7, fill: "#d2fff6", "fill-opacity": "0.8" });
-        g.append(d);
-        state.segs.push({ node: d, w: 0.95, leaf: true });
+        var glowDot = create("circle", { cx: lf.x, cy: lf.y, r: 4.6, fill: "#bdf3ea", "fill-opacity": "0.16" });
+        var d = create("circle", { cx: lf.x, cy: lf.y, r: 1.7, fill: "#d2fff6", "fill-opacity": "0.85" });
+        g.append(glowDot, d);
+        state.segs.push({ node: glowDot, w: 0.95, leaf: true, glow: true });
+        state.segs.push({ node: d, w: 0.95, leaf: true, glow: false });
       });
       return g;
     }
@@ -236,7 +245,9 @@
     state.segs.forEach(function (s) {
       if (s.leaf) s.node.setAttribute("fill", treeC);
       else s.node.setAttribute("stroke", treeC);
-      var op = Math.max(0, Math.min(1, (s.w - minVisible) / fadeBand)) * (s.leaf ? 0.8 : 0.9);
+      var fade = Math.max(0, Math.min(1, (s.w - minVisible) / fadeBand));
+      var base = s.glow ? (s.leaf ? 0.16 : 0.2) : (s.leaf ? 0.85 : 0.9);
+      var op = fade * base;
       s.node.setAttribute(s.leaf ? "fill-opacity" : "stroke-opacity", op.toFixed(3));
     });
 
