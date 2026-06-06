@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Breathe — See Your Lungs Through Every Choice</title>
+  <meta name="description" content="An interactive journey that reveals how smoking habits shape your lung health, step by step." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Ambient motion background -->
+  <canvas id="smoke-canvas" aria-hidden="true"></canvas>
+  <div class="aurora" aria-hidden="true">
+    <span class="aurora__blob aurora__blob--1"></span>
+    <span class="aurora__blob aurora__blob--2"></span>
+    <span class="aurora__blob aurora__blob--3"></span>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <main class="stage">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand__mark" aria-hidden="true"></span>
+        <span class="brand__name">BREATHE</span>
+      </div>
+      <div class="health-readout" id="health-readout" hidden>
+        <span class="health-readout__label">Lung Health</span>
+        <div class="health-readout__bar">
+          <span class="health-readout__fill" id="health-fill"></span>
+        </div>
+        <span class="health-readout__value" id="health-value">100%</span>
+      </div>
+    </header>
+
+    <!-- The breathing lungs visual (persists across all steps) -->
+    <section class="lungs-arena" id="lungs-arena">
+      <div class="lungs-glow" id="lungs-glow" aria-hidden="true"></div>
+      <div id="lungs-host" class="lungs-host" role="img" aria-label="Animated lungs reflecting current health"></div>
+      <div class="lungs-status" id="lungs-status">
+        <span class="lungs-status__dot"></span>
+        <span class="lungs-status__text" id="lungs-status-text">Calm, steady breathing</span>
+      </div>
+    </section>
+
+    <!-- Sliding panel that holds intro / questions / results -->
+    <section class="panel" id="panel" aria-live="polite"></section>
+
+    <!-- Progress dots -->
+    <nav class="progress" id="progress" hidden aria-label="Progress"></nav>
+  </main>
+
+  <footer class="footnote">
+    <p>This experience is for awareness and education only — it is not a medical diagnosis.</p>
+  </footer>
+
+  <script src="js/lungs.js"></script>
+  <script src="js/smoke.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
