@@ -72,16 +72,17 @@ body {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  filter: blur(80px);
+  filter: blur(55px);
 }
 .aurora__blob {
   position: absolute;
-  width: 46vmax;
-  height: 46vmax;
+  width: 42vmax;
+  height: 42vmax;
   border-radius: 50%;
-  opacity: 0.32;
+  opacity: 0.28;
   mix-blend-mode: screen;
-  animation: float 22s var(--ease) infinite alternate;
+  will-change: transform;
+  animation: float 26s var(--ease) infinite alternate;
 }
 .aurora__blob--1 { background: radial-gradient(circle, #7c5cff, transparent 60%); top: -18%; left: -10%; }
 .aurora__blob--2 { background: radial-gradient(circle, #19e3b1, transparent 60%); bottom: -22%; right: -12%; animation-delay: -7s; }
@@ -201,14 +202,17 @@ body {
 .lungs-host {
   position: relative;
   width: min(760px, 116vw);
-  filter: drop-shadow(0 40px 90px rgba(0,0,0,0.6));
-  animation: lungFloat 9s var(--ease) infinite alternate;
+  filter: drop-shadow(0 40px 90px rgba(0,0,0,0.55));
+  transform-origin: 50% 46%;
+  will-change: transform;
+  animation: lvBreathe var(--breath-dur, 4.6s) ease-in-out infinite;
 }
 .lungs-host svg { width: 100%; height: auto; display: block; }
 
-@keyframes lungFloat {
-  0%   { transform: translateY(-10px); }
-  100% { transform: translateY(14px); }
+/* GPU-composited breathing: scale amplitude + duration are set by JS. */
+@keyframes lvBreathe {
+  0%, 100% { transform: translateY(7px) scale(1); }
+  50%      { transform: translateY(-7px) scale(var(--breath-amp, 1.05)); }
 }
 
 /* Soft scrim so foreground text stays readable over the big lungs */
