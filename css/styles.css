@@ -179,44 +179,67 @@ body {
   text-align: right;
 }
 
-/* ---------- Lungs arena ---------- */
-.lungs-arena {
-  position: relative;
+/* ---------- Big background lungs ---------- */
+.lungs-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 1;            /* above ambient layers, below content */
   display: grid;
   place-items: center;
-  padding: 18px 0 6px;
-  min-height: 300px;
+  pointer-events: none;
 }
 .lungs-glow {
   position: absolute;
-  width: 360px;
-  height: 360px;
+  width: min(820px, 125vw);
+  height: min(820px, 125vw);
   border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.5;
-  background: radial-gradient(circle, hsl(var(--health-hue) 90% 60% / 0.5), transparent 65%);
+  filter: blur(90px);
+  opacity: 0.6;
+  background: radial-gradient(circle, hsl(var(--health-hue) 90% 58% / 0.55), transparent 62%);
   transition: background 1.2s var(--ease), opacity 1.2s var(--ease);
-  z-index: -1;
 }
 .lungs-host {
-  width: min(320px, 76vw);
-  filter: drop-shadow(0 24px 60px rgba(0,0,0,0.55));
+  position: relative;
+  width: min(760px, 116vw);
+  filter: drop-shadow(0 40px 90px rgba(0,0,0,0.6));
+  animation: lungFloat 9s var(--ease) infinite alternate;
 }
 .lungs-host svg { width: 100%; height: auto; display: block; }
 
+@keyframes lungFloat {
+  0%   { transform: translateY(-10px); }
+  100% { transform: translateY(14px); }
+}
+
+/* Soft scrim so foreground text stays readable over the big lungs */
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 50% 42%, transparent 0%, rgba(5,6,10,0.35) 78%),
+    linear-gradient(180deg, rgba(5,6,10,0.45) 0%, transparent 24%, transparent 62%, rgba(5,6,10,0.6) 100%);
+}
+
 .lungs-status {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 3;
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  margin-top: 10px;
-  padding: 7px 16px;
+  padding: 8px 18px;
   border-radius: 999px;
-  background: var(--glass);
+  background: rgba(10,14,26,0.6);
   border: 1px solid var(--stroke);
   font-size: 13px;
   color: var(--ink-soft);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
   transition: color 0.6s var(--ease);
+  white-space: nowrap;
 }
 .lungs-status__dot {
   width: 9px; height: 9px;
@@ -233,10 +256,15 @@ body {
   position: relative;
   margin-top: 14px;
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .card {
-  background: linear-gradient(180deg, var(--glass-strong), var(--glass));
+  width: 100%;
+  max-width: 560px;
+  background: linear-gradient(180deg, rgba(13,17,30,0.72), rgba(9,12,22,0.66));
   border: 1px solid var(--stroke);
   border-radius: var(--r-lg);
   padding: 30px 28px;
